@@ -73,4 +73,4 @@ SELECT * FROM posts;
 
 SELECT * FROM likes_dislikes;
 
-DROP TABLE coments;
+DROP TABLE users;
