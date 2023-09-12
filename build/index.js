@@ -10,6 +10,7 @@ const PostRouter_1 = require("./router/PostRouter");
 const LikeDislikeRouter_1 = require("./router/LikeDislikeRouter");
 const path_1 = __importDefault(require("path"));
 const dotenv_1 = require("dotenv");
+const ComentsRouter_1 = require("./router/ComentsRouter");
 const paths = [
     path_1.default.resolve(__dirname, "../dotenv.env"),
     path_1.default.resolve(__dirname, "../dotenv.env.example"),
@@ -24,5 +25,5 @@ app.listen(Number(process.env.PORT) || 3003, () => {
 app.use("/users", UserRouter_1.usersRouter);
 app.use("/posts", PostRouter_1.postsRouter);
 app.use("/posts", LikeDislikeRouter_1.likeDislikeRouter);
-app.use("/ping", UserRouter_1.usersRouter);
+app.use("/posts/:postId/coments", ComentsRouter_1.comentsRouter);
 //# sourceMappingURL=index.js.map

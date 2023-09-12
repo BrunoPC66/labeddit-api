@@ -12,5 +12,5 @@ const TokenManager_1 = require("../services/TokenManager");
 const PostDatabase_1 = require("../database/PostDatabase");
 exports.likeDislikeRouter = express_1.default.Router();
 const likeDislikeController = new LikeDislikeController_1.LikeDislikeController(new LikeDislikeBusiness_1.LikeDislikeBusiness(new PostDatabase_1.PostDatabase(), new LikeDislikeDatabase_1.LikeDislikeDataBase(), new TokenManager_1.TokenManager()));
-exports.likeDislikeRouter.put("/:id/like", likeDislikeController.updateLikeDislike);
+exports.likeDislikeRouter.put("/:postId/like", likeDislikeController.updateLikeDislike);
 //# sourceMappingURL=LikeDislikeRouter.js.map

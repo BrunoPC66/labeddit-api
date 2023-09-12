@@ -2,11 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Post = void 0;
 class Post {
-    constructor(id, content, likes, dislikes, createdAt, updatedAt, creatorId, creatorName) {
+    constructor(id, content, likes, dislikes, coments, createdAt, updatedAt, creatorId, creatorName) {
         this.id = id;
         this.content = content;
         this.likes = likes;
         this.dislikes = dislikes;
+        this.coments = coments;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.creatorId = creatorId;
@@ -39,6 +40,15 @@ class Post {
     removeDislike() {
         this.dislikes--;
     }
+    getComents() {
+        return this.coments;
+    }
+    addComent() {
+        this.coments++;
+    }
+    removeComent() {
+        this.coments--;
+    }
     getCreatedAt() {
         return this.createdAt;
     }
@@ -58,6 +68,7 @@ class Post {
             content: this.content,
             likes: this.likes,
             dislikes: this.dislikes,
+            coments: this.coments,
             created_at: this.createdAt,
             updated_at: this.updatedAt
         };
@@ -68,6 +79,7 @@ class Post {
             content: this.content,
             likes: this.likes,
             dislikes: this.dislikes,
+            coments: this.coments,
             createdAt: this.createdAt,
             updatedAt: this.updatedAt,
             creator: {

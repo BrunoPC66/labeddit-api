@@ -18,7 +18,7 @@ class LikeDislikeController {
         this.updateLikeDislike = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const input = updateLikeDislike_dto_1.UpdateLikeDislikeSchema.parse({
-                    id: req.params.id,
+                    postId: req.params.postId,
                     token: req.headers.authorization,
                     like: req.body.like
                 });

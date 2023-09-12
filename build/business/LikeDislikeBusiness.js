@@ -19,24 +19,24 @@ class LikeDislikeBusiness {
         this.likeDislikeDatabase = likeDislikeDatabase;
         this.tokenManager = tokenManager;
         this.updateLikeDislike = (input) => __awaiter(this, void 0, void 0, function* () {
-            const { id, token, like } = input;
+            const { postId, token, like } = input;
             const payload = yield this.tokenManager.getPayload(token);
             if (!payload) {
                 throw new BadRequest_1.BadRequest("Faça o login para interagir nos posts");
             }
-            const postDB = yield this.postDatabase.findPostById(id);
+            const postDB = yield this.postDatabase.findPostById(postId);
             if (!postDB) {
                 throw new BadRequest_1.BadRequest("Post não encontrado");
             }
             if (postDB.creator_id === payload.id) {
                 throw new BadRequest_1.BadRequest("Você não pode curtir ou discurtir o seu próprio post");
             }
-            const post = new Post_1.Post(postDB.id, postDB.content, postDB.likes, postDB.dislikes, postDB.created_at, postDB.updated_at, postDB.creator_id, postDB.creator_name);
-            const likeDislikeExist = yield this.likeDislikeDatabase.verifyExistenceOfLikeDislike(payload.id, id);
+            const post = new Post_1.Post(postDB.id, postDB.content, postDB.likes, postDB.dislikes, postDB.coments, postDB.created_at, postDB.updated_at, postDB.creator_id, postDB.creator_name);
+            const likeDislikeExist = yield this.likeDislikeDatabase.verifyExistenceOfLikeDislike(payload.id, postId);
             const likeToSQLite = like ? 1 : 0;
             const likeDislikeDB = {
                 user_id: payload.id,
-                post_id: id,
+                post_id: postId,
                 like: likeToSQLite
             };
             let message;

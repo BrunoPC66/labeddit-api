@@ -24,7 +24,7 @@ class PostBusiness {
                 throw new BadRequest_1.BadRequest('Requisição não autorizada');
             }
             const postPlusCreatorName = yield this.postDatabase.findPostPlusCreatorName(q);
-            const output = postPlusCreatorName.map((post) => new Post_1.Post(post.id, post.content, post.likes, post.dislikes, post.created_at, post.updated_at, post.creator_id, post.creator_name).postToBusiness());
+            const output = postPlusCreatorName.map((post) => new Post_1.Post(post.id, post.content, post.likes, post.dislikes, post.coments, post.created_at, post.updated_at, post.creator_id, post.creator_name).postToBusiness());
             return output;
         });
         this.createPost = (input) => __awaiter(this, void 0, void 0, function* () {
@@ -34,42 +34,43 @@ class PostBusiness {
                 throw new BadRequest_1.BadRequest("Requisição não autorizada");
             }
             const id = IdGenerator_1.IdGenerator.generator();
-            const postDB = new Post_1.Post(id, content, 0, 0, new Date().toISOString(), new Date().toISOString(), payload.id, payload.name).postToDB();
-            yield this.postDatabase.insertPost(postDB);
+            const newPost = new Post_1.Post(id, content, 0, 0, 0, new Date().toISOString(), new Date().toISOString(), payload.id, payload.name).postToDB();
+            yield this.postDatabase.insertPost(newPost);
         });
         this.editPost = (input) => __awaiter(this, void 0, void 0, function* () {
-            const { id, newContent, token } = input;
+            const { postId, newContent, token } = input;
             const payload = this.tokenManager.getPayload(token);
             if (!payload) {
                 throw new BadRequest_1.BadRequest();
             }
-            const postDB = yield this.postDatabase.findPostById(id);
+            const postDB = yield this.postDatabase.findPostById(postId);
             if (!postDB) {
                 throw new BadRequest_1.BadRequest("Post não encontrado");
             }
             if (postDB.creator_id !== payload.id) {
-                throw new BadRequest_1.BadRequest("Edição não permitida");
+                throw new BadRequest_1.BadRequest("Edição de post não permitida");
             }
-            const post = new Post_1.Post(postDB.id, postDB.content, postDB.likes, postDB.dislikes, postDB.created_at, postDB.updated_at, postDB.creator_id, postDB.creator_name);
+            const post = new Post_1.Post(postDB.id, postDB.content, postDB.likes, postDB.dislikes, postDB.coments, postDB.created_at, postDB.updated_at, postDB.creator_id, postDB.creator_name);
             if (newContent) {
                 post.setContent(newContent);
             }
             const editedPost = post.postToDB();
             yield this.postDatabase.editPost(editedPost);
-            const output = { content: post.getContent() };
-            return output;
         });
         this.deletePost = (input) => __awaiter(this, void 0, void 0, function* () {
-            const { id, token } = input;
+            const { postId, token } = input;
             const payload = this.tokenManager.getPayload(token);
             if (!payload) {
                 throw new BadRequest_1.BadRequest();
             }
-            const postDB = yield this.postDatabase.findPostById(id);
+            const postDB = yield this.postDatabase.findPostById(postId);
             if (!postDB) {
                 throw new BadRequest_1.BadRequest("Post não encontrado");
             }
-            yield this.postDatabase.deletePost(id);
+            if (postDB.creator_id !== payload.id) {
+                throw new BadRequest_1.BadRequest("Ação no post não permitida");
+            }
+            yield this.postDatabase.deletePost(postId);
         });
     }
 }

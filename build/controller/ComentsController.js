@@ -9,22 +9,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PostController = void 0;
+exports.ComentsController = void 0;
 const BaseError_1 = require("../errors/BaseError");
-const getPost_dto_1 = require("../dtos/dto-post/getPost.dto");
-const createPost_dto_1 = require("../dtos/dto-post/createPost.dto");
-const updatePost_dto_1 = require("../dtos/dto-post/updatePost.dto");
-const deletePost_dto_1 = require("../dtos/dto-post/deletePost.dto");
-class PostController {
-    constructor(postBusiness) {
-        this.postBusiness = postBusiness;
-        this.getPost = (req, res) => __awaiter(this, void 0, void 0, function* () {
+const getComentsDTO_1 = require("../dtos/dto-coments/getComentsDTO");
+const newComent_dto_1 = require("../dtos/dto-coments/newComent.dto");
+const updateComent_dto_1 = require("../dtos/dto-coments/updateComent.dto");
+const deleteComents_dto_1 = require("../dtos/dto-coments/deleteComents.dto");
+class ComentsController {
+    constructor(comentsBusiness) {
+        this.comentsBusiness = comentsBusiness;
+        this.getComents = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const input = getPost_dto_1.GetPostSchema.parse({
-                    q: req.query.q,
+                const input = getComentsDTO_1.GetComentsSchema.parse({
+                    postId: req.params.post_id,
                     token: req.headers.authorization
                 });
-                const output = yield this.postBusiness.getPost(input);
+                const output = yield this.comentsBusiness.getComents(input);
                 res.status(200).send(output);
             }
             catch (error) {
@@ -37,33 +37,15 @@ class PostController {
                 }
             }
         });
-        this.createPost = (req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.newComent = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const input = createPost_dto_1.CreatePostSchema.parse({
-                    content: req.body.content,
-                    token: req.headers.authorization
-                });
-                yield this.postBusiness.createPost(input);
-                res.status(201).send("Post criado com sucesso!");
-            }
-            catch (error) {
-                if (error instanceof BaseError_1.BaseError) {
-                    res.status(error.statusCode).send(error.message);
-                }
-                else {
-                    res.status(500).send("Erro inesperado");
-                }
-            }
-        });
-        this.editPost = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                const input = updatePost_dto_1.EditPostSchema.parse({
+                const input = newComent_dto_1.NewComentSchema.parse({
                     postId: req.params.postId,
-                    newContent: req.body.newContent,
-                    token: req.headers.authorization
+                    token: req.headers.authorization,
+                    content: req.body.content
                 });
-                yield this.postBusiness.editPost(input);
-                res.status(200).send("Post editado com sucesso!");
+                yield this.comentsBusiness.newComent(input);
+                res.status(200).send("Comentário realizado com sucesso!");
             }
             catch (error) {
                 if (error instanceof BaseError_1.BaseError) {
@@ -75,14 +57,15 @@ class PostController {
                 }
             }
         });
-        this.deletePost = (req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.updateComent = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const input = deletePost_dto_1.DeletePostSchema.parse({
-                    postId: req.params.postId,
-                    token: req.headers.authorization
+                const input = updateComent_dto_1.UpdateComentSchema.parse({
+                    id: req.params.id,
+                    token: req.headers.authorization,
+                    content: req.body.content
                 });
-                yield this.postBusiness.deletePost(input);
-                res.status(200).send("Post deletado com sucesso");
+                yield this.comentsBusiness.updateComent(input);
+                res.status(200).send("Comentário editado com sucesso!");
             }
             catch (error) {
                 if (error instanceof BaseError_1.BaseError) {
@@ -90,10 +73,30 @@ class PostController {
                 }
                 else {
                     res.status(500).send("Erro inesperado");
+                    console.log(error);
+                }
+            }
+        });
+        this.deleteComent = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const input = deleteComents_dto_1.DeleteComentSchema.parse({
+                    id: req.params.id,
+                    token: req.headers.authorization
+                });
+                yield this.comentsBusiness.deleteComent(input);
+                res.status(200).send("Comentário deletado com sucesso!");
+            }
+            catch (error) {
+                if (error instanceof BaseError_1.BaseError) {
+                    res.status(error.statusCode).send(error.message);
+                }
+                else {
+                    res.status(500).send("Erro inesperado");
+                    console.log(error);
                 }
             }
         });
     }
 }
-exports.PostController = PostController;
-//# sourceMappingURL=PostController.js.map
+exports.ComentsController = ComentsController;
+//# sourceMappingURL=ComentsController.js.map
