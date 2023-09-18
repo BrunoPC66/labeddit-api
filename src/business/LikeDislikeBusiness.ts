@@ -40,7 +40,7 @@ export class LikeDislikeBusiness {
             postDB.content,
             postDB.likes,
             postDB.dislikes,
-            postDB.coments,
+            postDB.comments,
             postDB.created_at,
             postDB.updated_at,
             postDB.creator_id,
