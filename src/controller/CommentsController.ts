@@ -1,24 +1,24 @@
 import { Request, Response } from "express";
 import { BaseError } from "../errors/BaseError";
-import { GetComentsSchema } from "../dtos/dto-coments/getComentsDTO";
-import { ComentsBusiness } from "../business/ComentsBusiness";
-import { NewComentSchema } from "../dtos/dto-coments/newComent.dto";
-import { UpdateComentSchema } from "../dtos/dto-coments/updateComent.dto";
-import { DeleteComentSchema } from "../dtos/dto-coments/deleteComents.dto";
+import { GetCommentsSchema } from "../dtos/dto-comments/getCommentsDTO";
+import { CommentsBusiness } from "../business/CommentsBusiness";
+import { NewCommentSchema } from "../dtos/dto-comments/newComment.dto";
+import { UpdateCommentSchema } from "../dtos/dto-comments/updateComment.dto";
+import { DeleteCommentSchema } from "../dtos/dto-comments/deleteComments.dto";
 
-export class ComentsController {
+export class CommentsController {
     constructor(
-        private comentsBusiness: ComentsBusiness
+        private commentsBusiness: CommentsBusiness
     ) { }
 
-    public getComents = async (req: Request, res: Response) => {
+    public getComments = async (req: Request, res: Response) => {
         try {
-            const input = GetComentsSchema.parse({
+            const input = GetCommentsSchema.parse({
                 postId: req.params.post_id,
                 token: req.headers.authorization
             })
 
-            const output = await this.comentsBusiness.getComents(input)
+            const output = await this.commentsBusiness.getComments(input)
 
             res.status(200).send(output)
 
@@ -33,15 +33,15 @@ export class ComentsController {
         }
     }
 
-    // public getComentById = async (req: Request, res: Response) => {
+    // public getCommentById = async (req: Request, res: Response) => {
     //     try {
-    //         const input = GetComentsSchema.parse({
-    //             comentId: req.params.comentId,
+    //         const input = GetCommentsSchema.parse({
+    //             commentId: req.params.commentId,
     //             postId: req.params.post_id,
     //             token: req.headers.authorization
     //         })
 
-    //         const output = await this.comentsBusiness.getComents(input)
+    //         const output = await this.commentsBusiness.getComments(input)
 
     //         res.status(200).send(output)
 
@@ -56,15 +56,15 @@ export class ComentsController {
     //     }
     // }
 
-    public newComent = async (req: Request, res: Response) => {
+    public newComment = async (req: Request, res: Response) => {
         try {
-            const input = NewComentSchema.parse({
+            const input = NewCommentSchema.parse({
                 postId: req.params.postId,
                 token: req.headers.authorization,
                 content: req.body.content
             })
 
-            await this.comentsBusiness.newComent(input)
+            await this.commentsBusiness.newComment(input)
 
             res.status(200).send("Comentário realizado com sucesso!")
         }
@@ -78,15 +78,15 @@ export class ComentsController {
         }
     }
 
-    public updateComent = async (req: Request, res: Response) => {
+    public updateComment = async (req: Request, res: Response) => {
         try {
-            const input = UpdateComentSchema.parse({
+            const input = UpdateCommentSchema.parse({
                 id: req.params.id,
                 token: req.headers.authorization,
                 content: req.body.content
             })
 
-            await this.comentsBusiness.updateComent(input)
+            await this.commentsBusiness.updateComment(input)
 
             res.status(200).send("Comentário editado com sucesso!")
         }
@@ -100,14 +100,14 @@ export class ComentsController {
         }
     }
 
-    public deleteComent = async (req: Request, res: Response) => {
+    public deleteComment = async (req: Request, res: Response) => {
         try {
-            const input = DeleteComentSchema.parse({
+            const input = DeleteCommentSchema.parse({
                 id: req.params.id,
                 token: req.headers.authorization
             })
 
-            await this.comentsBusiness.deleteComent(input)
+            await this.commentsBusiness.deleteComment(input)
 
             res.status(200).send("Comentário deletado com sucesso!")
         }

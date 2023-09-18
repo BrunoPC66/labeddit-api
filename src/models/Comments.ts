@@ -1,4 +1,4 @@
-export interface ComentsDB {
+export interface CommentsDB {
     id: string,
     post_id: string,
     user_id: string,
@@ -7,7 +7,7 @@ export interface ComentsDB {
     updated_at: string
 }
 
-export interface ComentsDBPlusCreatorName {
+export interface CommentsDBPlusCreatorName {
     id: string,
     post_id: string,
     user_id: string,
@@ -17,7 +17,7 @@ export interface ComentsDBPlusCreatorName {
     creator_name: string
 }
 
-export interface ComentsModel {
+export interface CommentsModel {
     id: string,
     postId: string;
     content: string,
@@ -30,7 +30,7 @@ export interface ComentsModel {
   }
   
 
-export class Coments {
+export class Comments {
     constructor(
         private id: string,
         private postId: string,
@@ -65,7 +65,7 @@ export class Coments {
         return this.creatorName
     }
 
-    public comentsToDB(): ComentsDB {
+    public commentsToDB(): CommentsDB {
         return {
             id: this.id,
             post_id: this.postId,
@@ -76,7 +76,7 @@ export class Coments {
         }
     }
 
-    public comentsToBusiness(): ComentsModel {
+    public commentsToBusiness(): CommentsModel {
         return {
             id: this.id,
             postId: this.postId,

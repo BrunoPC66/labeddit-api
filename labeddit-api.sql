@@ -10,33 +10,33 @@ CREATE TABLE
         created_at TEXT DEFAULT (DATETIME('now', 'localtime')) NOT NULL
     );
 
-INSERT INTO
-    users (id, name, email, password, role)
-VALUES
-    -- tipo NORMAL, senha = fulano123
-    (
-        'u001',
-        'Fulano',
-        'fulano@email.com',
-        '$2a$12$qPQj5Lm1dQK2auALLTC0dOWedtr/Th.aSFf3.pdK5jCmYelFrYadC',
-        'NORMAL'
-    ),
-    -- tipo NORMAL, senha = beltrana456
-    (
-        'u002',
-        'Beltrana',
-        'beltrana@email.com',
-        '$2a$12$403HVkfVSUbDioyciv9IC.oBlgMqudbnQL8ubebJIXScNs8E3jYe2',
-        'NORMAL'
-    ),
-    -- tipo ADMIN, senha = BigBoss789
-    (
-        'u003',
-        'BigBoss',
-        'bigboss@email.com',
-        '$2a$12$lHyD.hKs3JDGu2nIbBrxYujrnfIX5RW5oq/B41HCKf7TSaq9RgqJ.',
-        'ADMIN'
-    );
+-- INSERT INTO
+--     users (id, name, email, password, role)
+-- VALUES
+--     -- tipo NORMAL, senha = fulano123
+--     (
+--         'u001',
+--         'Fulano',
+--         'fulano@email.com',
+--         '$2a$12$qPQj5Lm1dQK2auALLTC0dOWedtr/Th.aSFf3.pdK5jCmYelFrYadC',
+--         'NORMAL'
+--     ),
+--     -- tipo NORMAL, senha = beltrana456
+--     (
+--         'u002',
+--         'Beltrana',
+--         'beltrana@email.com',
+--         '$2a$12$403HVkfVSUbDioyciv9IC.oBlgMqudbnQL8ubebJIXScNs8E3jYe2',
+--         'NORMAL'
+--     ),
+--     -- tipo ADMIN, senha = BigBoss789
+--     (
+--         'u003',
+--         'BigBoss',
+--         'bigboss@email.com',
+--         '$2a$12$lHyD.hKs3JDGu2nIbBrxYujrnfIX5RW5oq/B41HCKf7TSaq9RgqJ.',
+--         'ADMIN'
+--     );
 
 CREATE TABLE
     posts (
@@ -45,7 +45,7 @@ CREATE TABLE
         content TEXT NOT NULL,
         likes INTEGER NOT NULL,
         dislikes INTEGER NOT NULL,
-        coments INTEGER NOT NULL,
+        comments INTEGER NOT NULL,
         created_at TEXT DEFAULT (DATETIME('now', 'localtime')) NOT NULL,
         updated_at TEXT DEFAULT (DATETIME('now', 'localtime')) NOT NULL
     );
@@ -58,7 +58,7 @@ CREATE TABLE
     );
 
 CREATE TABLE
-    coments (
+    comments (
         id TEXT PRIMARY KEY UNIQUE NOT NULL,
         post_id TEXT NOT NULL REFERENCES posts (id) ON UPDATE CASCADE ON DELETE CASCADE,
         user_id TEXT NOT NULL REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -73,4 +73,6 @@ SELECT * FROM posts;
 
 SELECT * FROM likes_dislikes;
 
-DROP TABLE users;
+SELECT * FROM comments;
+
+-- DROP TABLE users;

@@ -6,7 +6,7 @@ import { postsRouter } from "./router/PostRouter";
 import { likeDislikeRouter } from "./router/LikeDislikeRouter";
 import path from "path";
 import { config } from "dotenv";
-import { comentsRouter } from "./router/ComentsRouter";
+import { commentsRouter } from "./router/CommentsRouter";
 
 // dotenv.config() ESTÁ DANDO PROBLEMA NA LEITURA DO 'dotenv'
 
@@ -29,4 +29,4 @@ app.listen(Number(process.env.PORT) || 3003, () => {
 app.use("/users", usersRouter);
 app.use("/posts", postsRouter);
 app.use("/posts", likeDislikeRouter);
-app.use("/posts/:postId/coments", comentsRouter);
+app.use("/posts/:postId/comments", commentsRouter);

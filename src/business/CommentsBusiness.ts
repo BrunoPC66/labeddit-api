@@ -1,22 +1,22 @@
-import { ComentsDatabase } from "../database/ComentsDatabase"
+import { CommentsDatabase } from "../database/CommentsDatabase"
 import { PostDatabase } from "../database/PostDatabase"
-import { DeleteComentInputDTO } from "../dtos/dto-coments/deleteComents.dto"
-import { GetComentsInputDTO } from "../dtos/dto-coments/getComentsDTO"
-import { NewComentInputDTO } from "../dtos/dto-coments/newComent.dto"
-import { UpdateComentInputDTO } from "../dtos/dto-coments/updateComent.dto"
+import { DeleteCommentInputDTO } from "../dtos/dto-comments/deleteComments.dto"
+import { GetCommentsInputDTO } from "../dtos/dto-comments/getCommentsDTO"
+import { NewCommentInputDTO } from "../dtos/dto-comments/newComment.dto"
+import { UpdateCommentInputDTO } from "../dtos/dto-comments/updateComment.dto"
 import { BadRequest } from "../errors/BadRequest"
-import { Coments, ComentsDB, ComentsModel } from "../models/Coments"
+import { Comments, CommentsDB, CommentsModel } from "../models/Comments"
 import { IdGenerator } from "../services/IdGenerator"
 import { TokenManager } from "../services/TokenManager"
 
-export class ComentsBusiness {
+export class CommentsBusiness {
     constructor(
-        private comentsDataBase: ComentsDatabase,
+        private commentsDataBase: CommentsDatabase,
         private postDatabase: PostDatabase,
         private tokenManager: TokenManager
     ) { }
 
-    public getComents = async (input: GetComentsInputDTO): Promise<ComentsModel[]> => {
+    public getComments = async (input: GetCommentsInputDTO): Promise<CommentsModel[]> => {
         const {
             postId,
             token
@@ -30,32 +30,32 @@ export class ComentsBusiness {
 
         const postDB = await this.postDatabase.findPostById(postId)
 
-        const comentsDB = await this.comentsDataBase.findPostComents(postId)
+        const commentsDB = await this.commentsDataBase.findPostComments(postId)
 
         if (postDB) {
-            if (!comentsDB) {
+            if (!commentsDB) {
                 throw new BadRequest("Post ainda sem comentários")
             }
         } else {
             throw new BadRequest("Post não encontrado")
         }
 
-        const output: ComentsModel[] = comentsDB.map(coment =>
-            new Coments(
-                coment.id,
-                coment.post_id,
-                coment.user_id,
-                coment.creator_name,
-                coment.content,
-                coment.created_at,
-                coment.updated_at
-            ).comentsToBusiness()
+        const output: CommentsModel[] = commentsDB.map(comment =>
+            new Comments(
+                comment.id,
+                comment.post_id,
+                comment.user_id,
+                comment.creator_name,
+                comment.content,
+                comment.created_at,
+                comment.updated_at
+            ).commentsToBusiness()
         )
 
         return output
     }
 
-    // public getComentById = async (input: GetComentsInputDTO): Promise<ComentsModel[]> => {
+    // public getCommentById = async (input: GetCommentsInputDTO): Promise<CommentsModel[]> => {
     //     const {
     //         q,
     //         postId,
@@ -70,32 +70,32 @@ export class ComentsBusiness {
 
     //     const postDB = await this.postDatabase.findPostById(postId)
 
-    //     const comentsDB = await this.comentsDataBase.findPostComents(postId)
+    //     const commentsDB = await this.commentsDataBase.findPostComments(postId)
 
     //     if (postDB) {
-    //         if (!comentsDB) {
+    //         if (!commentsDB) {
     //             throw new BadRequest("Post ainda sem comentários")
     //         }
     //     } else {
     //         throw new BadRequest("Post não encontrado")
     //     }
 
-    //     const output: ComentsModel[] = comentsDB.map(coment =>
-    //         new Coments(
-    //             coment.id,
-    //             coment.post_id,
-    //             coment.user_id,
-    //             coment.creator_name,
-    //             coment.content,
-    //             coment.created_at,
-    //             coment.updated_at
-    //         ).comentsToBusiness()
+    //     const output: CommentsModel[] = commentsDB.map(comment =>
+    //         new Comments(
+    //             comment.id,
+    //             comment.post_id,
+    //             comment.user_id,
+    //             comment.creator_name,
+    //             comment.content,
+    //             comment.created_at,
+    //             comment.updated_at
+    //         ).commentsToBusiness()
     //     )
 
     //     return output
     // }
 
-    public newComent = async (input: NewComentInputDTO): Promise <void> => {
+    public newComment = async (input: NewCommentInputDTO): Promise <void> => {
         const {
             postId,
             token,
@@ -116,7 +116,7 @@ export class ComentsBusiness {
 
         const id = IdGenerator.generator()
 
-        const newComent: ComentsDB = new Coments(
+        const newComment: CommentsDB = new Comments(
             id,
             postId,
             payload.id,
@@ -124,12 +124,12 @@ export class ComentsBusiness {
             content,
             new Date().toISOString(),
             new Date().toISOString()
-        ).comentsToDB()
+        ).commentsToDB()
         
-        await this.comentsDataBase.insertComent(newComent)
+        await this.commentsDataBase.insertComment(newComment)
     }
 
-    public updateComent = async (input: UpdateComentInputDTO): Promise <void> => {
+    public updateComment = async (input: UpdateCommentInputDTO): Promise <void> => {
         const {
             id,
             token,
@@ -142,36 +142,36 @@ export class ComentsBusiness {
             throw new BadRequest("Faça o login para interagir nos posts")
         }
 
-        const comentDB = await this.comentsDataBase.findComentById(id)
+        const commentDB = await this.commentsDataBase.findCommentById(id)
 
-        if (!comentDB) {
+        if (!commentDB) {
             throw new BadRequest("Comentário não encontrado")
         }
 
-        if (comentDB.user_id !== payload.id) {
+        if (commentDB.user_id !== payload.id) {
             throw new BadRequest("Edição de comentário não permitida")
         }
 
-        const coment = new Coments(
-            comentDB.id,
-            comentDB.post_id,
-            comentDB.user_id,
+        const comment = new Comments(
+            commentDB.id,
+            commentDB.post_id,
+            commentDB.user_id,
             payload.name,
-            comentDB.content,
-            comentDB.created_at,
+            commentDB.content,
+            commentDB.created_at,
             new Date().toISOString()
         )
 
         if (content) {
-            coment.setContent(content)
+            comment.setContent(content)
         }
 
-        const editedComent = coment.comentsToDB()
+        const editedComment = comment.commentsToDB()
 
-        await this.comentsDataBase.updateComent(editedComent)
+        await this.commentsDataBase.updateComment(editedComment)
     }
 
-    public deleteComent = async (input: DeleteComentInputDTO): Promise<void> => {
+    public deleteComment = async (input: DeleteCommentInputDTO): Promise<void> => {
         const {
             id,
             token
@@ -183,16 +183,16 @@ export class ComentsBusiness {
             throw new BadRequest("Faça o login para interagir nos posts")
         }
 
-        const comentDB = await this.comentsDataBase.findComentById(id)
+        const commentDB = await this.commentsDataBase.findCommentById(id)
 
-        if (!comentDB) {
+        if (!commentDB) {
             throw new BadRequest("Comentário não encontrado")
         }
 
-        if (comentDB.user_id !== payload.id) {
+        if (commentDB.user_id !== payload.id) {
             throw new BadRequest("Ação no comentário não permitida")
         }
 
-        await this.comentsDataBase.deleteComent(id)
+        await this.commentsDataBase.deleteComment(id)
     }
 }
