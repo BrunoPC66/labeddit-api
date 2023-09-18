@@ -6,7 +6,6 @@ import { CreatePostSchema } from "../dtos/dto-post/createPost.dto";
 import { EditPostSchema } from "../dtos/dto-post/updatePost.dto";
 import { DeletePostSchema } from "../dtos/dto-post/deletePost.dto";
 
-
 export class PostController {
     constructor(
         private postBusiness: PostBusiness
