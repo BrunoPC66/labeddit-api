@@ -1,21 +1,22 @@
 import express from "express";
 import cors from "cors";
-// import dotenv from "dotenv";
 import { usersRouter } from "./router/UserRouter";
 import { postsRouter } from "./router/PostRouter";
 import { likeDislikeRouter } from "./router/LikeDislikeRouter";
 import path from "path";
 import { config } from "dotenv";
+import dotenv from "dotenv";
 import { commentsRouter } from "./router/CommentsRouter";
 
-// dotenv.config() ESTÁ DANDO PROBLEMA NA LEITURA DO 'dotenv'
 
-const paths = [
-  path.resolve(__dirname, "../dotenv.env"),
-  path.resolve(__dirname, "../dotenv.env.example"),
-];
+// const paths = [
+//   path.resolve(__dirname, "../dotenv.env"),
+//   path.resolve(__dirname, "../dotenv.env.example"),
+// ];
 
-paths.find((validEnvPath) => !config({ path: validEnvPath }).error);
+// paths.find((validEnvPath) => !config({ path: validEnvPath }).error);
+
+dotenv.config()
 
 const app = express();
 
